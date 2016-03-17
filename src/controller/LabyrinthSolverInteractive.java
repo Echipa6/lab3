@@ -12,6 +12,7 @@ public class LabyrinthSolverInteractive implements LabyrinthSolver {
 
 	private Labyrinth model;
 	private LabyrinthView view;
+	private LabyrinthObserverPrint observer1;
 	
 	Scanner keyboard;
 	
@@ -20,6 +21,7 @@ public class LabyrinthSolverInteractive implements LabyrinthSolver {
 		this.model=model;
 		this.setView(view);
 		keyboard = new Scanner(System.in);
+		observer1=new LabyrinthObserverPrint();
 	}
 
 	@Override
@@ -63,12 +65,16 @@ public class LabyrinthSolverInteractive implements LabyrinthSolver {
 		switch(option)
 		{
 			case 1:  validateMove=moveUp();
+						observer1.processCell('U', validateMove);
 						break;
 			case 2:  validateMove=moveDown();
+						observer1.processCell('D', validateMove);
 						break;
 			case 3:  validateMove=moveLeft();
+						observer1.processCell('L', validateMove);
 						break;
 			case 4: validateMove=moveRight();
+						observer1.processCell('R', validateMove);
 						break;
 			default: validateMove=false;
 		}
@@ -131,8 +137,8 @@ public class LabyrinthSolverInteractive implements LabyrinthSolver {
 	@Override
 	public void getStartCell()
 	{
-		Integer startCell=model.getStartCell().x;
-		Integer row=model.getStartCell().y;
+		Integer startCell=model.getStartCell();
+		Integer row=startCell/model.getColumnCount();
 		Integer column=startCell%model.getColumnCount();
 		
 		if(model.markCell(row, column)==true)
@@ -151,23 +157,20 @@ public class LabyrinthSolverInteractive implements LabyrinthSolver {
 	public void startSolver()
 	{
 		getStartCell();
-		Integer finishRow=model.getFinishCell().x;
-		Integer finishColumn=model.getFinishCell().y;
+		Integer finishRow=model.getFinishCell()/model.getColumnCount();
+		Integer finishColumn=model.getFinishCell()%model.getColumnCount();
 		while(finishRow!=model.getCurrentRow() || finishColumn!=model.getCurrentColumn())
 		{
 			model.writeMatrix();
-			if(nextCellToExplore(this.readNextMove()))
-			{
+			nextCellToExplore(this.readNextMove());
+			
 				
-				System.out.println("Mutare valida");
-			}
-			else
-			{
-				System.out.println("Mutare invalida");
-			}
+			
 			
 		}
 		//Observer solutie
+		observer1.processSolution();
+		
 		
 	}
 

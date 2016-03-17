@@ -1,6 +1,6 @@
 package model;
 
-import java.awt.Point;
+
 
 public interface Labyrinth {
 
@@ -20,12 +20,12 @@ public interface Labyrinth {
 	public void markUnVisited(int row, int column);
 	public boolean isMarkedAt(int row,int column);
 	
-	public Point getStartCell();
-	public Point getFinishCell();
+	public Integer getStartCell();
+	public Integer getFinishCell();
 	public boolean markCell(Integer row, Integer column);
 	
 	public void readMatrix(String filename);
-	public void writeMatrix();
 	
-	public int getContentAt(int i, int j);
+	public void writeMatrix();
+
 }

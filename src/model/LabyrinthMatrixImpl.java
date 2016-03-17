@@ -1,8 +1,10 @@
 package model;
 
-import java.awt.Point;
 import java.io.*;
 import java.util.Scanner;
+
+import view.LabyrinthView;
+import view.LabyrinthViewText;
 
 public class LabyrinthMatrixImpl implements Labyrinth {
 
@@ -10,12 +12,14 @@ public class LabyrinthMatrixImpl implements Labyrinth {
 	public boolean visited[][];
 	private int numberRows,numberColumns;
 	private int currentColumn,currentRow;
+	private LabyrinthView view;
 	
 	public LabyrinthMatrixImpl(){
 		numberRows=0;
 		numberColumns=0;
 		matrix= new int[100][100];
 		visited= new boolean[100][100];
+		view=new LabyrinthViewText();
 	}
 	@Override
 	public void readMatrix(String filename){
@@ -41,7 +45,7 @@ public class LabyrinthMatrixImpl implements Labyrinth {
 		}
 		
 		
-	}
+	   }
 	@Override
 	public void writeMatrix(){
 		for(int i=0;i<numberRows;i++)
@@ -75,31 +79,35 @@ public class LabyrinthMatrixImpl implements Labyrinth {
 	}
 
 	@Override
-	public Point getStartCell() {
+	public Integer getStartCell() {
+		Integer start=0;
 		for(int i=0;i<numberRows;i++)
 		{
 			for(int j=0;j<numberColumns;j++)
 			{
 				if(matrix[i][j]==-1)
-					return new Point(i,j);
+					return start;
+				start++;
 			}
 					
 		}
-		return new Point(0,0);
+		return -1;
 	}
 
 	@Override
-	public Point getFinishCell() {
+	public Integer getFinishCell() {
+		Integer finish=0;
 		for(int i=0;i<numberRows;i++)
 		{
 			for(int j=0;j<numberColumns;j++)
 			{
 				if(matrix[i][j]==2)
-					return new Point(i,j);
+					return finish;
+				finish++;
 			}
 					
 		}
-		return new Point(0,0);
+		return -1;
 	}
 	@Override
 	public Integer getRowCount() {
@@ -150,20 +158,6 @@ public class LabyrinthMatrixImpl implements Labyrinth {
 	@Override
 	public boolean isMarkedAt(int row,int column){
 		return visited[row][column];
-	}
-	@Override
-	public int getContentAt(int row, int column) {
-		if(isMarkedAt(row,column))
-			return 3;
-		if(isWallAt(row,column))
-			return 1;
-		if(this.getStartCell().x==row && this.getStartCell().y==column)
-			return -1;
-		if(isFreeAt(row,column))
-			return 0;
-		return 2;
-		
-		
 	}
 
 }
